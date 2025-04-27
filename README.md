@@ -20,14 +20,6 @@ Real-time UX analytics dashboard that helps product teams detect user experience
    <script src="path-to/flowsense-tracker.js"></script>
    
 
-4. Start the FlowSense dashboard:
-   bash
-   # Using VS Code Live Server
-   1. Install Live Server extension
-   2. Right-click on index.html
-   3. Select "Open with Live Server"
-   
-
 ## Testing Real Websites
 
 1. Add the tracking script to your website's `<head>` section:
