@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowSense Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/config/client-config.js"></script>
+    <script src="/tracking/flowsense-tracker.js"></script>
+    <style>
+        .rage-target {
+            transition: background-color 0.3s;
+        }
+        .rage-target:active {
+            background-color: #fee2e2;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+    <div id="test-content" class="max-w-2xl mx-auto space-y-8">
+        <h1 class="text-3xl font-bold">FlowSense Test Page</h1>
+        <p class="text-gray-600">This page contains various elements to test FlowSense analytics:</p>
+
+        <!-- Test Section 1: Rage Clicks -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Test 1: Rage Clicks</h2>
+            <div class="rage-target p-4 bg-gray-100 rounded text-center cursor-pointer">
+                Click here repeatedly to trigger rage clicks
+            </div>
+        </div>
+
+        <!-- Test Section 2: Form Abandonment -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Test 2: Form Abandonment</h2>
+            <form id="test-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Submit
+                </button>
+            </form>
+        </div>
+
+        <!-- Test Section 3: Dead Clicks -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Test 3: Dead Clicks</h2>
+            <div class="space-y-2">
+                <div class="text-gray-400 p-4 bg-gray-100 rounded">
+                    This text looks clickable but isn't
+                </div>
+                <div class="text-blue-500 p-4 bg-gray-100 rounded">
+                    This also looks like a link but isn't
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Section 4: Navigation -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Test 4: Navigation</h2>
+            <div class="space-x-4">
+                <a href="#page1" class="text-blue-500 hover:underline">Page 1</a>
+                <a href="#page2" class="text-blue-500 hover:underline">Page 2</a>
+                <a href="#page3" class="text-blue-500 hover:underline">Page 3</a>
+            </div>
+        </div>
+
+        <!-- Test Section 5: Scroll Behavior -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Test 5: Scroll Behavior</h2>
+            <div class="h-96 overflow-y-auto bg-gray-50 p-4">
+                <div class="space-y-4">
+                    <p>Scroll quickly to trigger rapid scroll detection</p>
+                    <!-- Add more paragraphs to enable scrolling -->
+                    <p>Lorem ipsum dolor sit amet...</p>
+                    <p>Consectetur adipiscing elit...</p>
+                    <!-- Repeat several times -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form abandonment tracking
+            const form = document.getElementById('test-form');
+            form.addEventListener('input', () => {
+                window.flowsense.trackEvent({
+                    type: 'form_interaction',
+                    formId: 'test-form'
+                });
+            });
+
+            // Track form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                window.flowsense.trackEvent({
+                    type: 'form_submit',
+                    formId: 'test-form'
+                });
+            });
+
+            // Track navigation
+            window.addEventListener('hashchange', () => {
+                window.flowsense.trackEvent({
+                    type: 'navigation',
+                    data: {
+                        from: document.referrer,
+                        to: window.location.href
+                    }
+                });
+            });
+
+            console.log('Test page initialized with FlowSense tracking');
+        });
+    </script>
+</body>
+</html>

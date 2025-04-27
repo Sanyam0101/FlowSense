@@ -1,0 +1,27 @@
+.chart-container {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.issue-item {
+    border-left: 4px solid transparent;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.issue-item.critical {
+    border-left-color: #ef4444;
+}
+
+.issue-item.warning {
+    border-left-color: #f59e0b;
+}
+
+.issue-item.info {
+    border-left-color: #3b82f6;
+}
