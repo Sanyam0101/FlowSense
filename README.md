@@ -1,4 +1,5 @@
 # FlowSense - Real-time UX Analytics
+Real-time UX analytics dashboard that helps product teams detect user experience issues instantly.
 
 ## Setup Instructions
 
@@ -17,14 +18,6 @@
 3. Add the tracking script to your website:
    html
    <script src="path-to/flowsense-tracker.js"></script>
-   
-
-4. Start the FlowSense dashboard:
-   bash
-   # Using VS Code Live Server
-   1. Install Live Server extension
-   2. Right-click on index.html
-   3. Select "Open with Live Server"
    
 
 ## Testing Real Websites
@@ -68,8 +61,3 @@ window.flowsense.trackEvent({
         // Your custom data
     }
 });
-
-
-### Manual Screenshots
-javascript
-const screenshot = await window.flowsense.takeScreenshot();
