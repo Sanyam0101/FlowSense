@@ -1,3 +1,6 @@
+
+<img width="201" height="72" alt="Screenshot 2025-04-27 142407" src="https://github.com/user-attachments/assets/41cdbbce-2552-45db-be23-4bd43ba30893" />
+
 # FlowSense – Real-time UX Analytics Dashboard
 
 _A cutting-edge toolkit for product teams to detect and analyze user experience issues instantly. Leverages real-time tracking, AI-powered insights, and visual session replays._
@@ -97,15 +100,23 @@ data: { /* Your custom data */ }
 
 ## Demo Screenshots
 
-![Dashboard UI](Screenshot-2025-08-29-160520.jpg)
+![Dashboard UI]
+<img width="1900" height="880" alt="Screenshot 2025-04-27 142218" src="https://github.com/user-attachments/assets/2e52c42a-805b-4fa5-a01b-a88d8171ae80" />
 
-![Dashboard UI Page Example](Screenshot-2025-08-29-160541.jpg)
 
-![Visual Session Replay](Screenshot-2025-08-29-160528.jpg)
+![Dashboard UI Page Example]
+<img width="1892" height="911" alt="Screenshot 2025-04-27 142227" src="https://github.com/user-attachments/assets/a5e22783-16f9-4c37-899a-80dcb0f661f9" />
+
+<img width="1050" height="879" alt="Screenshot 2025-04-27 142254" src="https://github.com/user-attachments/assets/1bd71d78-4170-4b1f-b562-d85a470d71ad" />
+
+![Visual Session Replay]
+
+<img width="1761" height="807" alt="Screenshot 2025-04-27 142312" src="https://github.com/user-attachments/assets/3846ba71-78ae-42b3-aed3-e3a8a2b6b9bb" />
 
 ![Event Details](Screenshot-2025-08-29-160535.jpg)
 
----
+---<img width="1909" height="882" alt="Screenshot 2025-04-27 142242" src="https://github.com/user-attachments/assets/e2b446f0-69b9-4bed-aee1-5f29d8488c3e" />
+
 
 ## License
 
