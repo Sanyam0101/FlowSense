@@ -1,54 +1,19 @@
-function IssuesList() {
-    try {
-        const issues = [
-            {
-                id: 1,
-                severity: 'critical',
-                title: 'High Rage Clicks Detected',
-                description: 'Multiple users experiencing difficulty with payment form submission',
-                location: '/checkout/payment',
-                occurrences: 24
-            },
-            {
-                id: 2,
-                severity: 'warning',
-                title: 'Form Abandonment',
-                description: 'Users leaving signup form after email verification step',
-                location: '/signup',
-                occurrences: 12
-            }
-        ];
+function IssuesList({ events }) {
+    const issues = getTopIssues(events);
 
-        return (
-            <div data-name="issues-list" className="bg-white rounded-lg shadow">
-                <div className="p-4 border-b">
-                    <h3 className="text-lg font-semibold">Active Issues</h3>
-                </div>
-                <div className="p-4">
-                    {issues.map(issue => (
-                        <div key={issue.id} data-name={`issue-${issue.id}`} 
-                             className={`issue-item ${issue.severity} mb-4`}>
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h4 className="font-medium">{issue.title}</h4>
-                                    <p className="text-sm text-gray-600 mt-1">{issue.description}</p>
-                                    <p className="text-xs text-gray-500 mt-2">
-                                        <i className="fas fa-map-marker-alt mr-1"></i>
-                                        {issue.location}
-                                    </p>
-                                </div>
-                                <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
-                                    {issue.occurrences} occurrences
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+    return (
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold mb-4">Detected Issues</h3>
+            <div className="space-y-3">
+                {issues.map((issue) => (
+                    <div key={issue.id} className="border border-rose-100 bg-rose-50 rounded-lg p-4">
+                        <p className="font-semibold text-rose-700">{issue.type.replace('_', ' ')}</p>
+                        <p className="text-sm text-slate-600">Page: {issue.page}</p>
+                        <p className="text-xs text-slate-500">Occurrences: {issue.count}</p>
+                    </div>
+                ))}
+                {!issues.length && <p className="text-sm text-slate-500">No issues detected with current data.</p>}
             </div>
-        );
-    } catch (error) {
-        console.error('IssuesList component error:', error);
-        reportError(error);
-        return null;
-    }
+        </div>
+    );
 }

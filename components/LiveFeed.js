@@ -1,31 +1,24 @@
-function LiveFeed() {
-    try {
-        const [events, setEvents] = React.useState([
-            { id: 1, type: 'rage_click', page: '/checkout', timestamp: '2 mins ago' },
-            { id: 2, type: 'form_abandon', page: '/signup', timestamp: '5 mins ago' },
-            { id: 3, type: 'dead_click', page: '/products', timestamp: '8 mins ago' }
-        ]);
+function LiveFeed({ events }) {
+    const recent = [...events].slice(-15).reverse();
 
-        return (
-            <div data-name="live-feed" className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold mb-4">Live User Activity</h3>
-                <div className="space-y-4">
-                    {events.map(event => (
-                        <div key={event.id} data-name={`event-${event.id}`} className="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <div className="w-2 h-2 rounded-full bg-red-500 mr-3"></div>
-                            <div className="flex-1">
-                                <p className="text-sm font-medium">{event.type.replace('_', ' ')}</p>
-                                <p className="text-xs text-gray-500">{event.page}</p>
+    return (
+        <div className="p-6">
+            <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 className="text-lg font-semibold mb-4">Live Event Feed</h3>
+                <div className="space-y-2 max-h-[580px] overflow-y-auto">
+                    {recent.map((event, idx) => (
+                        <div key={`${event.timestamp}-${idx}`} className="p-3 rounded-lg border border-slate-100 bg-slate-50">
+                            <div className="flex justify-between text-sm">
+                                <span className="font-semibold text-slate-800">{event.type}</span>
+                                <span className="text-slate-500">{new Date(event.timestamp).toLocaleTimeString()}</span>
                             </div>
-                            <span className="text-xs text-gray-400">{event.timestamp}</span>
+                            <p className="text-xs text-slate-500 mt-1">{event.page || event.url || '/'}</p>
+                            <p className="text-xs text-slate-400 mt-1">session: {event.sessionId || 'unknown'}</p>
                         </div>
                     ))}
+                    {!recent.length && <p className="text-sm text-slate-500">No events yet.</p>}
                 </div>
             </div>
-        );
-    } catch (error) {
-        console.error('LiveFeed component error:', error);
-        reportError(error);
-        return null;
-    }
+        </div>
+    );
 }

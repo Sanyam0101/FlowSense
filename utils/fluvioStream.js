@@ -1,47 +1,44 @@
 class FluvioEventStream {
     constructor() {
         this.subscribers = new Set();
-        this.buffer = [];
-        this.MAX_BUFFER_SIZE = 1000;
         this.connected = false;
         this.ws = null;
+        this.reconnectTimer = null;
     }
 
-    async connect() {
+    connect() {
+        if (!CONFIG.WS_ENDPOINT || window.location.hostname.includes('github.io')) {
+            return;
+        }
+
         try {
             this.ws = new WebSocket(CONFIG.WS_ENDPOINT);
-            
+
             this.ws.onopen = () => {
                 this.connected = true;
-                console.log('Connected to Fluvio event stream');
+                if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
             };
 
             this.ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                this.processEvent(data);
+                try {
+                    const data = JSON.parse(event.data);
+                    this.notifySubscribers(data);
+                } catch (e) {
+                    console.warn('Invalid websocket event payload', e);
+                }
             };
 
-            this.ws.onerror = (error) => {
-                console.error('Fluvio connection error:', error);
+            this.ws.onerror = () => {
                 this.connected = false;
             };
 
             this.ws.onclose = () => {
                 this.connected = false;
-                setTimeout(() => this.connect(), 5000); // Reconnect after 5 seconds
+                this.reconnectTimer = setTimeout(() => this.connect(), 5000);
             };
         } catch (error) {
-            console.error('Fluvio connection error:', error);
             this.connected = false;
         }
-    }
-
-    processEvent(event) {
-        this.buffer.push(event);
-        if (this.buffer.length > this.MAX_BUFFER_SIZE) {
-            this.buffer.shift();
-        }
-        this.notifySubscribers(event);
     }
 
     subscribe(callback) {
@@ -50,19 +47,13 @@ class FluvioEventStream {
     }
 
     notifySubscribers(event) {
-        this.subscribers.forEach(callback => callback(event));
-    }
-
-    getBuffer() {
-        return [...this.buffer];
+        this.subscribers.forEach((callback) => callback(event));
     }
 
     disconnect() {
-        if (this.ws) {
-            this.ws.close();
-        }
+        if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+        if (this.ws) this.ws.close();
         this.connected = false;
-        this.subscribers.clear();
     }
 }
 

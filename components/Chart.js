@@ -1,23 +1,25 @@
-function Chart() {
-    try {
-        return (
-            <div data-name="analytics-chart" className="chart-container">
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">User Behavior Trends</h3>
-                    <select data-name="time-range" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                        <option value="24h">Last 24 hours</option>
-                        <option value="7d">Last 7 days</option>
-                        <option value="30d">Last 30 days</option>
-                    </select>
-                </div>
-                <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-500">Chart visualization will be rendered here</p>
-                </div>
+function Chart({ events }) {
+    const eventTypes = ['click', 'rage_click', 'dead_click', 'form_start', 'form_abandon', 'navigation'];
+    const counts = eventTypes.map((type) => events.filter((event) => event.type === type).length);
+    const max = Math.max(...counts, 1);
+
+    return (
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold mb-4">Behavior Trends (Current Buffer)</h3>
+            <div className="space-y-3">
+                {eventTypes.map((type, index) => (
+                    <div key={type} className="grid grid-cols-[120px_1fr_50px] items-center gap-3 text-sm">
+                        <span className="font-medium text-slate-600">{type}</span>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-blue-500"
+                                style={{ width: `${(counts[index] / max) * 100}%` }}
+                            ></div>
+                        </div>
+                        <span className="text-slate-500 text-right">{counts[index]}</span>
+                    </div>
+                ))}
             </div>
-        );
-    } catch (error) {
-        console.error('Chart component error:', error);
-        reportError(error);
-        return null;
-    }
+        </div>
+    );
 }
