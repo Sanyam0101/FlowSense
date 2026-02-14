@@ -1,58 +1,29 @@
 function Sidebar({ activePage, onPageChange }) {
-    try {
-        const [collapsed, setCollapsed] = React.useState(false);
+    const menuItems = [
+        { id: 'overview', icon: 'fa-house', label: 'Overview' },
+        { id: 'analytics', icon: 'fa-chart-simple', label: 'Analytics' },
+        { id: 'issues', icon: 'fa-triangle-exclamation', label: 'Issues' },
+        { id: 'live-feed', icon: 'fa-tower-broadcast', label: 'Live Feed' },
+        { id: 'data-export', icon: 'fa-file-export', label: 'Data Export' },
+        { id: 'settings', icon: 'fa-gear', label: 'Settings' }
+    ];
 
-        const menuItems = [
-            { id: 'overview', icon: 'fa-house', label: 'Overview' },
-            { id: 'issues', icon: 'fa-triangle-exclamation', label: 'Issues' },
-            { id: 'analytics', icon: 'fa-chart-simple', label: 'Analytics' },
-            { id: 'settings', icon: 'fa-gear', label: 'Settings' }
-        ];
-
-        const handleNavigation = (pageId) => {
-            onPageChange(pageId);
-            const event = {
-                type: 'navigation',
-                data: {
-                    from: activePage,
-                    to: pageId,
-                    timestamp: new Date().toISOString()
-                }
-            };
-            fluvioStream.processEvent(event);
-        };
-
-        return (
-            <aside data-name="sidebar" 
-                   className={`bg-white shadow-sm transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}>
-                <div className="flex items-center justify-between p-4 border-b">
-                    {!collapsed && <h2 className="font-semibold text-gray-800">Navigation</h2>}
-                    <button data-name="collapse-btn"
-                            onClick={() => setCollapsed(!collapsed)}
-                            className="p-2 rounded-lg hover:bg-gray-100">
-                        <i className={`fas fa-${collapsed ? 'chevron-right' : 'chevron-left'}`}></i>
+    return (
+        <aside className="w-64 bg-slate-900 text-slate-100 min-h-[calc(100vh-73px)]">
+            <nav className="p-4 space-y-2">
+                {menuItems.map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => onPageChange(item.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg transition ${
+                            activePage === item.id ? 'bg-blue-600 text-white' : 'hover:bg-slate-800'
+                        }`}
+                    >
+                        <i className={`fas ${item.icon} mr-3`}></i>
+                        {item.label}
                     </button>
-                </div>
-                <nav className="mt-4">
-                    <ul className="space-y-2">
-                        {menuItems.map(item => (
-                            <li key={item.id} data-name={`sidebar-item-${item.id}`}>
-                                <button
-                                    onClick={() => handleNavigation(item.id)}
-                                    className={`w-full flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors
-                                              ${activePage === item.id ? 'bg-blue-50 text-blue-600' : ''}`}>
-                                    <i className={`fas ${item.icon} w-5`}></i>
-                                    {!collapsed && <span className="ml-3">{item.label}</span>}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            </aside>
-        );
-    } catch (error) {
-        console.error('Sidebar component error:', error);
-        reportError(error);
-        return null;
-    }
+                ))}
+            </nav>
+        </aside>
+    );
 }
