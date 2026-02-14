@@ -6,7 +6,7 @@ function App() {
     });
     const [settings, setSettings] = React.useState(() => {
         const saved = localStorage.getItem('flowsense_settings');
-        return saved ? JSON.parse(saved) : { refreshInterval: 2000, maxBuffer: 200 };
+        return saved ? JSON.parse(saved) : { refreshInterval: 2000, maxBuffer: 200, autoSample: true };
     });
 
     React.useEffect(() => {
@@ -37,6 +37,8 @@ function App() {
     }, [settings.maxBuffer]);
 
     React.useEffect(() => {
+        if (!settings.autoSample) return undefined;
+
         const timer = setInterval(() => {
             const fakeEventTypes = ['click', 'navigation', 'form_start', 'form_abandon', 'rage_click', 'dead_click'];
             const fakePages = ['/home', '/pricing', '/signup', '/checkout', '/dashboard'];
@@ -52,7 +54,7 @@ function App() {
         }, settings.refreshInterval);
 
         return () => clearInterval(timer);
-    }, [settings.refreshInterval, settings.maxBuffer]);
+    }, [settings.refreshInterval, settings.maxBuffer, settings.autoSample]);
 
     const generateSampleBatch = () => {
         const now = Date.now();
@@ -68,6 +70,11 @@ function App() {
         setEvents((prev) => [...prev, ...batch].slice(-settings.maxBuffer));
     };
 
+    const clearData = () => {
+        setEvents([]);
+        localStorage.removeItem('flowsense_events');
+    };
+
     return (
         <div className="min-h-screen bg-slate-50">
             <Header totalEvents={events.length} onGenerateSample={generateSampleBatch} />
@@ -79,6 +86,7 @@ function App() {
                         events={events}
                         settings={settings}
                         onUpdateSettings={(partial) => setSettings((prev) => ({ ...prev, ...partial }))}
+                        onClearData={clearData}
                     />
                 </main>
             </div>

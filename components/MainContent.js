@@ -1,4 +1,4 @@
-function MainContent({ activePage, events, settings, onUpdateSettings }) {
+function MainContent({ activePage, events, settings, onUpdateSettings, onClearData }) {
     if (activePage === 'overview') return <Overview events={events} />;
 
     if (activePage === 'analytics') {
@@ -21,7 +21,9 @@ function MainContent({ activePage, events, settings, onUpdateSettings }) {
 
     if (activePage === 'live-feed') return <LiveFeed events={events} />;
     if (activePage === 'data-export') return <DataExport events={events} />;
-    if (activePage === 'settings') return <Settings settings={settings} onUpdateSettings={onUpdateSettings} />;
+    if (activePage === 'settings') {
+        return <Settings settings={settings} onUpdateSettings={onUpdateSettings} onClearData={onClearData} />;
+    }
 
     return <Overview events={events} />;
 }

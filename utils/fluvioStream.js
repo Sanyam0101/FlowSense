@@ -4,12 +4,15 @@ class FluvioEventStream {
         this.connected = false;
         this.ws = null;
         this.reconnectTimer = null;
+        this.shouldReconnect = true;
     }
 
     connect() {
-        if (!CONFIG.WS_ENDPOINT || window.location.hostname.includes('github.io')) {
+        if (!CONFIG.WS_ENDPOINT || window.location.hostname.includes('github.io') || this.ws) {
             return;
         }
+
+        this.shouldReconnect = true;
 
         try {
             this.ws = new WebSocket(CONFIG.WS_ENDPOINT);
@@ -34,10 +37,14 @@ class FluvioEventStream {
 
             this.ws.onclose = () => {
                 this.connected = false;
-                this.reconnectTimer = setTimeout(() => this.connect(), 5000);
+                this.ws = null;
+                if (this.shouldReconnect) {
+                    this.reconnectTimer = setTimeout(() => this.connect(), 5000);
+                }
             };
         } catch (error) {
             this.connected = false;
+            this.ws = null;
         }
     }
 
@@ -51,8 +58,12 @@ class FluvioEventStream {
     }
 
     disconnect() {
+        this.shouldReconnect = false;
         if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
-        if (this.ws) this.ws.close();
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
         this.connected = false;
     }
 }
